@@ -1,0 +1,98 @@
+{
+  "name": "dsh-opencode-patch",
+  "version": "1.4.2-fix.1",
+  "description": "OpenCode on DeepSeek Harness — session affinity, Zen/Go gateway origin headers, free-tier tool fallback, and live Go quota display. Fork build: non-ASCII project header fix, credentials-service key resolution, and an API-key field in the settings card.",
+  "keywords": [
+    "cordis",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "llm",
+    "missing-session-id",
+    "opencode",
+    "opencode-go",
+    "opencode-zen",
+    "prompt-cache",
+    "session-affinity",
+    "x-opencode-session"
+  ],
+  "homepage": "https://github.com/SHU543/dsh-opencode-patch",
+  "bugs": {
+    "url": "https://github.com/SHU543/dsh-opencode-patch/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "viztor"
+  },
+  "contributors": [
+    {
+      "name": "SHU543",
+      "url": "https://github.com/SHU543",
+      "note": "fork: non-ASCII header fix, credentials-service key resolution, settings-card API key field"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SHU543/dsh-opencode-patch.git"
+  },
+  "files": [
+    "lib",
+    "locale/*.json",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "README.zh-CN.md",
+    "PATCHES.md",
+    "INSTALL.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "lib/index.mjs",
+  "types": "lib/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.mts",
+      "import": "./lib/index.mjs",
+      "default": "./lib/index.mjs"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "3.18.5-alpha.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.5-alpha.2 <4.1.0",
+    "@deepseek-ai/dsh-typert-protocol": ">=0.2.1-alpha.1 <0.2.2"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "icon": "./icon.svg",
+  "engines": {
+    "node": ">=24"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-model-selection",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}

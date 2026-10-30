@@ -1,0 +1,62 @@
+# dsh-opencode-patch layer.
+#
+# Adds one host plugin row that manages session affinity, OpenCode Zen gateway
+# origin headers, free-tier compatibility, a models.dev-backed model catalog,
+# and a live Go quota / session-spend meter.
+#
+# NOTE: `name` must equal this package's npm name (dsh-opencode-patch) —
+# the host resolves row names to node_modules paths. `id` is the
+# settings namespace and the plugin's own `name` export.
+#
+# Configuration (row `config`, all optional):
+#
+# Shown in the settings card (Settings -> Plugins -> OpenCode Patch). These are
+# the decisions a user actually makes: behaviour toggles, plus the credential
+# policy. See src/settings-fields.ts CARD_FIELDS.
+#   injectUserAgent: boolean    restore OpenCode CLI User-Agent stripped by DSH adapter (default true).
+#   injectOriginHeaders: bool   inject x-opencode-client (default true).
+#   injectProject: boolean      attach active workspace project in x-opencode-project (default true).
+#   enrichModels: boolean       merge the models.dev catalog into gateway model listings and DSH
+#                               model discovery; off leaves both raw (default true).
+#   injectCoreTools: boolean    auto-inject read & bash tool schemas on free models (default true).
+#   usageEnabled: boolean       enable host-side OpenCode Go usage querying (default true).
+#   showUsagePrice: boolean     show session spend + active model rate in the meter (default true).
+#   keySource: string           which credential source wins: auto | request | configured (default 'auto').
+#
+# Config-only overrides — the card deliberately hides these, because each is a
+# literal, a marker, or a reference whose default fits every documented setup.
+# See src/settings-fields.ts CONFIG_ONLY_FIELDS.
+#   providers: [string]         provider route keys to intercept (default: opencode, opencode-go,
+#                               opencode-responses, opencode-anthropic, opencode-google,
+#                               opencode-go-responses, opencode-go-anthropic, opencode-go-google — covers every
+#                               route this layer declares, including the Google bridge's).
+#   userAgent: string           optional custom User-Agent override (default empty = use OpenCode CLI UA).
+#   originClient: string        x-opencode-client value (default 'cli').
+#   sessionIdEnv: string        env var carrying a caller-supplied session id (default 'OPENCODE_SESSION_ID').
+#   freeModelMarker: string     model-id substring getting the core-tool fallback ('*' = all, '' = none; default 'free').
+#   gatewayUrls: [string]       URL substrings marking OpenCode gateway traffic (default both
+#                               families: ['opencode.ai/zen', 'opencode.ai/inference']).
+#   usageBaseURL: string        OpenCode Go gateway base URL (default 'https://opencode.ai/zen/go/v1').
+#   debug: true|false           log every streamed call that receives the header.
+#   debugFile: path             optional append target for stream debug JSONL.
+- insert:
+    - id: dsh-opencode-patch
+      name: "dsh-opencode-patch"
+      config:
+        providers:
+          - opencode
+          - opencode-go
+          - opencode-responses
+          - opencode-anthropic
+          - opencode-google
+          - opencode-go-responses
+          - opencode-go-anthropic
+          - opencode-go-google
+        injectUserAgent: true
+        userAgent: ""
+        injectOriginHeaders: true
+        injectCoreTools: true
+        enrichModels: true
+        usageEnabled: true
+        showUsagePrice: true
+        debug: false
